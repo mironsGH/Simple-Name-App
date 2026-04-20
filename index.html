@@ -3,24 +3,80 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Simple Name App</title>
+  <title>Name Tracker</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="card">
-    <h1>Simple Name App</h1>
-    <form id="nameForm">
-      <input
-        type="text"
-        id="nameInput"
-        placeholder="Enter your name"
-        autocomplete="off"
-        maxlength="50"
-      />
-      <button type="submit">Say Hello</button>
-    </form>
-    <p id="greeting" class="greeting" aria-live="polite"></p>
+
+  <div class="container">
+    <header>
+      <h1>Name Tracker</h1>
+      <p class="subtitle">Keep track of people you meet</p>
+    </header>
+
+    <!-- Add / Edit Form -->
+    <section class="card" id="formSection">
+      <h2 id="formTitle">Add New Contact</h2>
+      <form id="contactForm">
+        <input type="hidden" id="editId" />
+
+        <div class="form-row two-col">
+          <div class="field">
+            <label for="name">Name <span class="req">*</span></label>
+            <input type="text" id="name" placeholder="Jane Smith" required />
+          </div>
+          <div class="field">
+            <label for="date">Date Met <span class="req">*</span></label>
+            <input type="date" id="date" required />
+          </div>
+        </div>
+
+        <div class="form-row two-col">
+          <div class="field">
+            <label for="location">Location</label>
+            <input type="text" id="location" placeholder="Coffee shop, conference, etc." />
+          </div>
+          <div class="field">
+            <label for="association">Potential Association</label>
+            <input type="text" id="association" placeholder="Business partner, client, mentor…" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label for="tags">Tags <span class="hint">(comma-separated)</span></label>
+            <input type="text" id="tags" placeholder="tech, investor, designer" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label for="notes">Notes</label>
+            <textarea id="notes" rows="3" placeholder="Anything else worth remembering…"></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" id="submitBtn">Save Contact</button>
+          <button type="button" class="btn-ghost" id="cancelBtn" hidden>Cancel</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Search & Filter -->
+    <section class="search-bar">
+      <input type="search" id="searchInput" placeholder="Search by name, location, association, or tag…" />
+      <span id="resultCount" class="result-count"></span>
+    </section>
+
+    <!-- Contact List -->
+    <section id="contactList" class="contact-list">
+      <!-- cards injected by JS -->
+    </section>
+
+    <p id="emptyState" class="empty-state" hidden>No contacts yet — add one above.</p>
   </div>
+
   <script src="app.js"></script>
 </body>
 </html>
