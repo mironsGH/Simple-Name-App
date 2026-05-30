@@ -15,7 +15,7 @@ function App() {
     return (
       <WorkoutSession
         exerciseId={selectedExercise}
-        lastSession={getLastSession(selectedExercise)}
+        getLastSession={getLastSession}
         onSave={handleSave}
         onBack={() => setSelectedExercise(null)}
       />
@@ -25,7 +25,6 @@ function App() {
   return (
     <ExercisePicker
       onSelect={setSelectedExercise}
-      history={JSON.parse(localStorage.getItem("workout_history") || "{}")}
     />
   );
 }

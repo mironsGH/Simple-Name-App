@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { EXERCISE_CATEGORIES } from "../data/exercises";
 
-export default function ExercisePicker({ onSelect, history }) {
+export default function ExercisePicker({ onSelect }) {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState(null);
 
@@ -53,20 +53,16 @@ export default function ExercisePicker({ onSelect, history }) {
         {filtered.map((cat) => (
           <div key={cat.name} className="cat-group">
             <h3 className="cat-name">{cat.name}</h3>
-            {cat.exercises.map((ex) => {
-              const hasHistory = !!history[ex.id]?.length;
-              return (
-                <button
-                  key={ex.id}
-                  className="exercise-card"
-                  onClick={() => onSelect(ex.id)}
-                >
-                  <span className="ex-icon">{ex.icon}</span>
-                  <span className="ex-name">{ex.name}</span>
-                  {hasHistory && <span className="history-dot" title="Has previous sessions" />}
-                </button>
-              );
-            })}
+            {cat.exercises.map((ex) => (
+              <button
+                key={ex.id}
+                className="exercise-card"
+                onClick={() => onSelect(ex.id)}
+              >
+                <span className="ex-icon">{ex.icon}</span>
+                <span className="ex-name">{ex.name}</span>
+              </button>
+            ))}
           </div>
         ))}
       </div>

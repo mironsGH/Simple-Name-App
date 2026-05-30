@@ -1,13 +1,19 @@
 function formatDate(iso) {
-  const d = new Date(iso);
-  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  return new Date(iso).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
 }
 
 function setLabel(set) {
   const weight = set.weight ? `${set.weight}lbs` : "BW";
   const reps = set.reps ? `×${set.reps}` : "";
   if (set.type === "rir") return `${weight}${reps} @RIR${set.rir ?? "?"}`;
-  if (set.type === "myo") return `${weight}${reps} MYO`;
+  if (set.type === "myo") {
+    const miniCount = set.miniSets?.length ?? 0;
+    return `${weight}${reps}+${miniCount} MYO`;
+  }
   return `${weight}${reps}`;
 }
 

@@ -1,16 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SetRow from "./SetRow";
 import PreviousSession from "./PreviousSession";
 import { findExercise } from "../data/exercises";
 
 function newSet() {
-  return { weight: "", reps: "", type: "straight", rir: 2 };
+  return { weight: "", reps: "", type: "straight", rir: 2, miniSets: [] };
 }
 
-export default function WorkoutSession({ exerciseId, lastSession, onSave, onBack }) {
+export default function WorkoutSession({ exerciseId, getLastSession, onSave, onBack }) {
   const exercise = findExercise(exerciseId);
   const [sets, setSets] = useState([newSet()]);
+  const [lastSession, setLastSession] = useState(null);
   const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    getLastSession(exerciseId).then(setLastSession);
+  }, [exerciseId, getLastSession]);
 
   const updateSet = (index, updated) => {
     setSets((prev) => prev.map((s, i) => (i === index ? updated : s)));
@@ -25,10 +31,12 @@ export default function WorkoutSession({ exerciseId, lastSession, onSave, onBack
     setSets((prev) => [...prev, { ...newSet(), weight: last?.weight || "" }]);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const filled = sets.filter((s) => s.weight || s.reps);
     if (filled.length === 0) return;
-    onSave(exerciseId, filled);
+    setSaving(true);
+    await onSave(exerciseId, filled);
+    setSaving(false);
     setSaved(true);
   };
 
@@ -54,6 +62,7 @@ export default function WorkoutSession({ exerciseId, lastSession, onSave, onBack
         <span>Weight</span>
         <span>Reps</span>
         <span className="legend-type" title="Tap pill to cycle: — → RIR → MYO">Type ⓘ</span>
+        <span />
       </div>
 
       <div className="sets-list">
@@ -80,8 +89,8 @@ export default function WorkoutSession({ exerciseId, lastSession, onSave, onBack
           </button>
         </div>
       ) : (
-        <button className="btn-primary save-btn" onClick={handleSave}>
-          Save Session
+        <button className="btn-primary save-btn" onClick={handleSave} disabled={saving}>
+          {saving ? "Saving…" : "Save Session"}
         </button>
       )}
     </div>
